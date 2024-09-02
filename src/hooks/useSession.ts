@@ -1,10 +1,11 @@
+import { useFullScreenLoading } from '@/context/FullScreenLoadingProvider';
 import { peticionFormatoMetodo, Servicios } from '@/services/Servicios';
 import { eliminarCookie, leerCookie } from '@/utils/cookies';
 import { verificarToken } from '@/utils/token';
 import { delay } from '@/utils/utilidades';
-import axios, { Method, RawAxiosRequestHeaders } from 'axios';
 
 export const useSession = () => {
+  const { mostrarFullScreen, ocultarFullScreen } = useFullScreenLoading();
   const sesionPeticion = async ({
     tipo = 'get',
     url,
@@ -52,5 +53,20 @@ export const useSession = () => {
     eliminarCookie('token'); // Eliminando access_token
   };
 
-  return { sesionPeticion, borrarCookiesSesion };
+  const cerrarSesion = async () => {
+    try {
+      mostrarFullScreen('Cerrando sesión');
+      await delay(1000);
+      const token = leerCookie('token');
+      borrarCookiesSesion();
+
+      window.location.reload();
+    } catch (e) {
+      window.location.reload();
+    } finally {
+      ocultarFullScreen();
+    }
+  };
+
+  return { sesionPeticion, borrarCookiesSesion, cerrarSesion };
 };

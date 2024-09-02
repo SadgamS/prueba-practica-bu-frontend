@@ -1,3 +1,4 @@
+'use client';
 import LoginRegistroContainer from '@/components/app/login/LoginRegistroContainer';
 import { Stack } from '@mui/material';
 

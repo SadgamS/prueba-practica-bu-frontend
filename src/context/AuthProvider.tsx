@@ -4,7 +4,7 @@ import { Constantes } from '@/config/constantes';
 import { useAlerts } from '@/hooks/useAlerts';
 import { useSession } from '@/hooks/useSession';
 import { Servicios } from '@/services/Servicios';
-import { guardarCookie } from '@/utils/cookies';
+import { guardarCookie, leerCookie } from '@/utils/cookies';
 import { InterpreteMensajes } from '@/utils/interpreteMensajes';
 import { delay, encodeBase64 } from '@/utils/utilidades';
 import { useRouter } from 'next/navigation';
@@ -14,23 +14,49 @@ import { useFullScreenLoading } from './FullScreenLoadingProvider';
 interface ContextProps {
   ingresar: (usuario: string, password: string) => Promise<void>;
   loadinglogin: boolean;
+  usuario: UsuarioType | null;
+  inicializarUsuario: () => Promise<void>;
+  estaAutenticado: boolean;
 }
 
 const AuthContext = createContext<ContextProps>({} as ContextProps);
 
 export const AuhtProvider = ({ children }: { children: ReactNode }) => {
-  const [usuario, setUsuario] = useState<UsuarioType | null>(null);
+  const [user, setUser] = useState<UsuarioType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { Alerta } = useAlerts();
-  const { borrarCookiesSesion } = useSession();
+  const { borrarCookiesSesion, sesionPeticion } = useSession();
   const { mostrarFullScreen, ocultarFullScreen } = useFullScreenLoading();
 
   const router = useRouter();
 
   const borrarSesionUsuario = () => {
-    // setUser(null);
+    setUser(null);
     borrarCookiesSesion();
+  };
+
+  const inicializarUsuario = async () => {
+    const token = leerCookie('token');
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      mostrarFullScreen('Verificando sesión');
+      await obtenerUsuario();
+
+      await delay(1000);
+    } catch (error: Error | any) {
+      borrarSesionUsuario();
+      router.replace('/login');
+      throw error;
+    } finally {
+      setLoading(false);
+      ocultarFullScreen();
+    }
   };
 
   const login = async (usuario: string, contrasena: string) => {
@@ -48,7 +74,13 @@ export const AuhtProvider = ({ children }: { children: ReactNode }) => {
 
       guardarCookie('token', respuesta.datos?.token);
 
-      //   setUser(respuesta.datos)
+      const userResponse: UsuarioType = {
+        usuario: respuesta.datos?.usuario,
+        nombreCompleto: respuesta.datos?.nombreCompleto,
+        rol: respuesta.datos?.rol,
+      };
+
+      setUser(userResponse);
       mostrarFullScreen('Iniciando sesión');
       await delay(1000);
       router.replace('/admin/home');
@@ -62,11 +94,29 @@ export const AuhtProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const obtenerUsuario = async () => {
+    const usuario = await sesionPeticion({
+      url: `${Constantes.baseApiUrl}/usuario/perfil`,
+      tipo: 'get',
+    });
+
+    const userResponse: UsuarioType = {
+      usuario: usuario.datos?.usuario,
+      nombreCompleto: usuario.datos?.nombreCompleto,
+      rol: usuario.datos?.rol,
+    };
+
+    setUser(userResponse);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         ingresar: login,
         loadinglogin: loading,
+        usuario: user,
+        inicializarUsuario,
+        estaAutenticado: !!user && !loading,
       }}
     >
       {children}
