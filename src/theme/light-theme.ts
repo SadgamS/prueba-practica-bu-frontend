@@ -11,6 +11,9 @@ const poppins = Poppins({
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
+    background: {
+      default: '#F0F2F5',
+    },
   },
   typography: {
     fontFamily: poppins.style.fontFamily,
