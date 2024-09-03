@@ -65,10 +65,22 @@ const Cuentas = ({ idCliente }: CuentasProps) => {
 
   const acciones: Array<ReactNode> = [
     <IconoTooltip
+      id={'regresar'}
+      titulo={'Regresar'}
+      key={`accionRegresar`}
+      accion={() => {
+        router.push('/admin/home');
+      }}
+      icono={'arrow_back'}
+      name={'Regresar a la página principal'}
+    />,
+    <IconoTooltip
       id={'actualizar'}
       titulo={'Actualizar'}
       key={`accionActualizar`}
-      accion={async () => {}}
+      accion={async () => {
+        await obtenerCuentasPeticion();
+      }}
       icono={'refresh'}
       name={'Actualizar lista de cuentas'}
     />,
@@ -148,7 +160,6 @@ const Cuentas = ({ idCliente }: CuentasProps) => {
     setCuentaSeleccionada(cuenta);
     setModalOpen(true);
   };
-
 
   const paginacion = (
     <Paginacion
