@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend Prueba Practica
 
-## Getting Started
+## Tecnologias usadas
 
-First, run the development server:
+- React, libreria de javascript para la creacion de interfaces de usuario.
+- Next.js, framework de React para la creacion de aplicaciones web.
+- Material-UI, libreria de React para la creacion de componentes de interfaz de usuario.
+- Axios, libreria de javascript para realizar peticiones HTTP.
+- React-Hook-Form, libreria de React para la creacion de formularios.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Instalacion
+
+### Requisitos
+
+- Node.js
+- npm
+
+### Pasos
+
+1. Configurar las variables de entorno en el archivo `.env` en la raiz del proyecto. Puede usar el archivo `.env.example` como referencia.
+
+```
+ cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El archivo `.env` debe tener las siguientes variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable              | Descripcion                |
+| --------------------- | -------------------------- |
+| `NEXT_PUBLIC_API_URL` | URL del backend a consumir |
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. Instalar las dependencias del proyecto.
 
-## Learn More
+```
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Iniciar el servidor de desarrollo.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+4. Acceder a la aplicacion en el navegador.
 
-## Deploy on Vercel
+```
+http://localhost:3000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estructura de archivos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Carpeta      | Descripcion                                                                   |
+| ------------ | ----------------------------------------------------------------------------- |
+| `src`        | Contiene el codigo fuente de la aplicacion.                                   |
+| `app`        | Contiene las paginas de la aplicacion (Router de Next.js).                    |
+| `components` | Contiene los componentes de la aplicacion.                                    |
+| `config`     | Contiene la configuracion de la aplicacion.                                   |
+| `hooks`      | Contiene los hooks personalizados de la aplicacion.                           |
+| `context`    | Contiene los contextos de la aplicacion.                                      |
+| `services`   | Contiene los servicios de la aplicacion(Para realizar peticiones al backend). |
+| `theme`      | Contiene el tema de la aplicacion.                                            |
+| `utils`      | Contiene utilidades de la aplicacion.                                         |
+
+
+## Autor
+- Brayan Dennis Aguilar Aparicio
