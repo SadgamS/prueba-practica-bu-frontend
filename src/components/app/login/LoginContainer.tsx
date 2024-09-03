@@ -11,7 +11,14 @@ const LoginContainer = () => {
   const { control, handleSubmit } = useForm<{
     usuario: string;
     contrasena: string;
-  }>();
+  }>(
+    {
+      defaultValues: {
+        usuario: 'admin',
+        contrasena: 'admin',
+      },
+    }
+  );
 
   const { ingresar, loadinglogin } = useAuth();
 
