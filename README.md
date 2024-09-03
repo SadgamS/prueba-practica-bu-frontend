@@ -12,7 +12,7 @@
 
 ### Requisitos
 
-- Node.js
+- Node.js >= 20
 - npm
 
 ### Pasos
